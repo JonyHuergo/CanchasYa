@@ -3,7 +3,8 @@
   if(isset($_SESSION["registrado"])){
     header("Location: paginaPrincipal.html");
     }
-  require_once "funciones/validaciones.php";
+  // require_once "funciones/validaciones.php";
+  require_once "objetos/validaciones.php";
   require_once "funciones/funcionesUsuarios.php";
 
   $errores = [
@@ -17,7 +18,7 @@
   // Validar si se completo o no el formulario
   if ($_POST) {
 
-      $erroresEnNombreDeUsuario = validarNombreDeUsuario($_POST["username"]);
+      $erroresEnNombreDeUsuario = Validaciones::validarNombreDeUsuario($_POST["username"]);
 
   if (empty($erroresEnNombreDeUsuario)) {
     $user["username"] = $_POST["username"];
@@ -25,7 +26,10 @@
     $errores["username"] = $erroresEnNombreDeUsuario;
   }
 
-  $erroresEnPassword = validarPassword($_POST["contrasena"], $_POST["contrasena_confirm"]);
+
+
+//Validar password
+  $erroresEnPassword = Validaciones::validarPassword($_POST["contrasena"], $_POST["contrasena_confirm"]);
 
   if (empty($erroresEnPassword)) {
     $user["contrasena"] = $_POST["contrasena"];
@@ -33,7 +37,8 @@
     $errores["contrasena"] = $erroresEnPassword;
   }
 
-  $erroresEnMail = validarEmail($_POST["email"], $_POST["email_confirm"]);
+//Validar  email
+  $erroresEnMail = Validaciones::validarEmail($_POST["email"], $_POST["email_confirm"]);
 
   if (empty($erroresEnMail)) {
     $user["email"] = $_POST["email"];
@@ -41,13 +46,13 @@
     $errores["email"] = $erroresEnMail;
   }
 
-  if (isset($_FILES["avatar"]) && validarAvatar($_FILES["avatar"])) {
+  if (isset($_FILES["avatar"]) && Validaciones::validarAvatar($_FILES["avatar"])) {
     $user["avatar_url"] = $_FILES["avatar"];
   }
 
-      if (! huboErrores($errores)) {
+      if (! Validaciones::huboErrores($errores)) {
           if ($bytes=crearUsuario($user)) {
-      header("Location: paginaPricipal.html");
+      header("Location: paginaPrincipal.html");
     } else {
       exit("Ha ocurrido un error inesperado");
     }
@@ -94,8 +99,8 @@
       <div class="area">
 
           <form role="form" action="registro.php" method="post" enctype="multipart/form-data">
-            
-                <?php if (huboErrores($errores)) : ?>
+
+                <?php if (Validaciones::huboErrores($errores)) : ?>
                     <div id="errores" class="alert alert-danger">
                       <ul>
                         <?php foreach($errores as $bolsaDeErrores) : ?>

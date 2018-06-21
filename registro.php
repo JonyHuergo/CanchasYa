@@ -4,9 +4,8 @@ if(isset($_SESSION["registrado"])){
   header("Location: paginaPrincipal.html");
 }
 // require_once "funciones/validaciones.php";
-require_once "objetos/validaciones.php";
-require_once "funciones/funcionesUsuarios.php";
-require_once "objetos/JsonDb.php";
+require_once "clases/validaciones.php";
+require_once "clases/JsonDb.php";
 
 $errores = [
   "username" => [],

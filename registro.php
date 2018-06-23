@@ -1,18 +1,38 @@
 <?php
-session_start();
-if(isset($_SESSION["registrado"])){
-  header("Location: paginaPrincipal.html");
-}
-// require_once "funciones/validaciones.php";
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+ session_start();
+ if(isset($_SESSION["registrado"])){
+   header("Location: paginaPrincipal.html");
+ }
+
 require_once "objetos/validaciones.php";
 require_once "objetos/JsonDb.php";
+require_once "objetos/SQLdb.php";
 
-$errores = [
-  "username" => [],
-  "email" => [],
-  "password" => []
+$dsn ='mysql:host=127.0.0.1;dbname=movies_db;port=3306';
+$db_user = 'root';
+$db_pass = 'root';
+
+//Booleano para definir si se utiliza SQL o JSON para guardar los datos
+$SQL = true;
+
+if($SQL){
+  $SQLdb = new SQLdb($dsn,$db_user,$db_pass);
+}
+
+ $errores = [
+   "username" => [],
+   "email" => [],
+   "password" => []
 ];
-$user = JsonDb::usuarioNuevo();
+
+if(!$SQL){
+  $user = JsonDb::usuarioNuevo();
+}
+
 // Validar si se completo o no el formulario
 if ($_POST) {
   $erroresEnNombreDeUsuario = Validaciones::validarNombreDeUsuario($_POST["username"]);
@@ -39,11 +59,32 @@ if ($_POST) {
     $user["avatar_url"] = $_FILES["avatar"];
   }
   if (! Validaciones::huboErrores($errores)) {
-    if ($bytes=JsonDb::crearUsuario($user)) {
-      header("Location: paginaPrincipal.html");
+
+    if(!$SQL){
+
+      if (JsonDb::crearUsuario($user)) {
+        header("Location: paginaPrincipal.html");
+      } else {
+        exit("Ha ocurrido un error inesperado");
+      }
+
     } else {
-      exit("Ha ocurrido un error inesperado");
+
+      $SQLdb->PDO->beginTransaction();
+
+      try {
+       $smt = $SQLdb->PDO->exec("DELETE FROM movies WHERE title = 'Avatar'");
+       $SQLdb->PDO->commit();
+      }
+      catch(PDOException $Exception) {
+
+       $SQLdb->PDO->rollBack();
+       echo $Exception->getMessage();
+      }
+      echo $smt;
+      //header("Location: paginaPrincipal.html");
     }
+
   }
 }
 ?>

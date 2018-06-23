@@ -3,7 +3,7 @@
   class SQLdb extends Db{
 
 
-    private $PDO:
+    private $PDO;
     const OPT = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
 
     public function __construct($dns, $user, $password){

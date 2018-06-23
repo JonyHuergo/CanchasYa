@@ -16,7 +16,7 @@ class JsonDb{
     $usuario["contrasena"] = password_hash($usuario["contrasena"], PASSWORD_BCRYPT);
 
     // detectar si se ha subido un avatar y generar la URL
-    if (is_array($usuario["avatar_url"])) {;
+    if (is_array($usuario["avatar_url"])) {
 
       $nombre = $usuario["avatar_url"]["name"];
       $archivo = $usuario["avatar_url"]["tmp_name"];

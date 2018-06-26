@@ -13,7 +13,7 @@ class JsonDb{
 
   static function crearUsuario($usuario) {
     // hashear el password del usuario
-    $usuario["contrasena"] = password_hash($usuario["contrasena"], PASSWORD_BCRYPT);
+    $usuario["password"] = password_hash($usuario["password"], PASSWORD_BCRYPT);
 
     // detectar si se ha subido un avatar y generar la URL
     if (is_array($usuario["avatar_url"])) {
@@ -26,7 +26,7 @@ class JsonDb{
       $miArchivo = $miArchivo . "/avatars/";
       $miArchivo = $miArchivo . $usuario["username"] . "_profile" .  $ext;
 
-      $movido = move_uploaded_file($archivo, $miArchivo);;
+      $movido = move_uploaded_file($archivo, $miArchivo);
 
       $usuario["avatar_url"] = $miArchivo;
     }

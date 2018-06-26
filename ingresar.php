@@ -3,7 +3,17 @@
     if(isset($_SESSION["registrado"])){
     header("Location: paginaPrincipal.html");
     }
-    require_once "funciones/funcionesUsuarios.php";
+    require_once "clases/JsonDb.php";
+    require_once "clases/SQLdb.php";
+    require_once "clases/Db.php";
+
+    $dns ='mysql:host=127.0.0.1;dbname=e-commerce;port=3306';
+    $db_user = 'root';
+    $db_pass = 'root';
+
+    //Booleano para definir si se utiliza SQL o JSON para guardar los datos
+    $SQL = true;
+
     $errores = [
       "usuario" => "",
       "password" => ""
@@ -16,9 +26,15 @@
         $errores ["password"] = "La contraseña debe ser completada";
       }
       if ($_POST["usuario"] && $_POST["contraseña"]){
-       $usuario = buscarUsuario($_POST["usuario"]);
+        if($SQL){
+          $SQLdb = new SQLdb($dns, $db_user, $db_pass);
+          $usuario = $SQLdb->buscarUsuario($_POST["usuario"]);
+        } else{
+          $usuario = JsonDb::buscarUsuario($_POST["usuario"]);
+        }
+
        if ($usuario) {
-        $passwordValidado = password_verify($_POST["contraseña"], $usuario["contrasena"]);
+        $passwordValidado = password_verify($_POST["contraseña"], $usuario["password"]);
         if ($passwordValidado) {
           $_SESSION["registrado"]=true;
           $_SESSION["usuario"]=$_POST["usuario"];

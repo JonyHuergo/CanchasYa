@@ -8,11 +8,12 @@ error_reporting(E_ALL);
    header("Location: paginaPrincipal.html");
  }
 
-require_once "objetos/validaciones.php";
-require_once "objetos/JsonDb.php";
-require_once "objetos/SQLdb.php";
+require_once "clases/validador.php";
+require_once "clases/JsonDb.php";
+require_once "clases/SQLdb.php";
+require_once "clases/Db.php";
 
-$dsn ='mysql:host=127.0.0.1;dbname=movies_db;port=3306';
+$dns ='mysql:host=127.0.0.1;dbname=e-commerce;port=3306';
 $db_user = 'root';
 $db_pass = 'root';
 
@@ -20,7 +21,8 @@ $db_pass = 'root';
 $SQL = true;
 
 if($SQL){
-  $SQLdb = new SQLdb($dsn,$db_user,$db_pass);
+  Db::inicializar($dns,$db_user,$db_pass);
+  $SQLdb = new SQLdb($dns,$db_user,$db_pass);
 }
 
  $errores = [
@@ -35,30 +37,36 @@ if(!$SQL){
 
 // Validar si se completo o no el formulario
 if ($_POST) {
-  $erroresEnNombreDeUsuario = Validaciones::validarNombreDeUsuario($_POST["username"]);
+  if(isset($_POST["nombre"])){
+    $user["nombre"] = $_POST["nombre"];
+  }
+  if(isset($_POST["apellido"])){
+    $user["apellido"] = $_POST["apellido"];
+  }
+  $erroresEnNombreDeUsuario = Validador::validarNombreDeUsuario($_POST["username"]);
   if (empty($erroresEnNombreDeUsuario)) {
     $user["username"] = $_POST["username"];
   } else {
     $errores["username"] = $erroresEnNombreDeUsuario;
   }
   //Validar password
-  $erroresEnPassword = Validaciones::validarPassword($_POST["contrasena"], $_POST["contrasena_confirm"]);
+  $erroresEnPassword = Validador::validarPassword($_POST["password"], $_POST["password_confirm"]);
   if (empty($erroresEnPassword)) {
-    $user["contrasena"] = $_POST["contrasena"];
+    $user["password"] = $_POST["password"];
   } else {
-    $errores["contrasena"] = $erroresEnPassword;
+    $errores["password"] = $erroresEnPassword;
   }
   //Validar  email
-  $erroresEnMail = Validaciones::validarEmail($_POST["email"], $_POST["email_confirm"]);
+  $erroresEnMail = Validador::validarEmail($_POST["email"], $_POST["email_confirm"]);
   if (empty($erroresEnMail)) {
     $user["email"] = $_POST["email"];
   } else {
     $errores["email"] = $erroresEnMail;
   }
-  if (isset($_FILES["avatar"]) && Validaciones::validarAvatar($_FILES["avatar"])) {
+  if (isset($_FILES["avatar"]) && Validador::validarAvatar($_FILES["avatar"])) {
     $user["avatar_url"] = $_FILES["avatar"];
   }
-  if (! Validaciones::huboErrores($errores)) {
+  if (! Validador::huboErrores($errores)) {
 
     if(!$SQL){
 
@@ -70,10 +78,20 @@ if ($_POST) {
 
     } else {
 
+      $usuario = new Usuario($user["email"],$user["username"],$user["password"],$user["nombre"],$user["apellido"],$user["avatar_url"]);
+
+      $nombre = $usuario->getNombre();
+      $apellido = $usuario->getApellido();
+      $email = $usuario->getEmail();
+      $username = $usuario->getUsername();
+      $password = $usuario->getPassword();
+      $avatar = $usuario->getAvatar();
+
       $SQLdb->PDO->beginTransaction();
 
       try {
-       $smt = $SQLdb->PDO->exec("DELETE FROM movies WHERE title = 'Avatar'");
+       $smt = $SQLdb->PDO->exec("INSERT INTO usuarios (nombre, apellido, email, username, password, avatar)
+                                 VALUES ('$nombre','$apellido','$email','$username','$password','$avatar');");
        $SQLdb->PDO->commit();
       }
       catch(PDOException $Exception) {
@@ -81,8 +99,7 @@ if ($_POST) {
        $SQLdb->PDO->rollBack();
        echo $Exception->getMessage();
       }
-      echo $smt;
-      //header("Location: paginaPrincipal.html");
+      header("Location: paginaPrincipal.php");
     }
 
   }
@@ -128,7 +145,7 @@ if ($_POST) {
 
         <form role="form" action="registro.php" method="post" enctype="multipart/form-data">
 
-          <?php if (Validaciones::huboErrores($errores)) : ?>
+          <?php if (Validador::huboErrores($errores)) : ?>
             <div id="errores" class="alert alert-danger">
               <ul>
                 <?php foreach($errores as $bolsaDeErrores) : ?>
@@ -176,16 +193,16 @@ if ($_POST) {
           </div>
 
           <div>
-            <label for="contrasena">Contraseña</label>
+            <label for="password">Contraseña</label>
             <br/>
-            <input type="password" class="form-control" id="contrasena" name="contrasena" placeholder="Ingrese Contraseña">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Ingrese Contraseña">
             <br/>
           </div>
 
           <div>
-            <label for="contrasena-confirm">Confirmar Contraseña</label>
+            <label for="password-confirm">Confirmar Contraseña</label>
             <br/>
-            <input type="password" class="form-control" id="contrasena-confirm" name="contrasena_confirm" placeholder="Ingrese Confirmación Contraseña">
+            <input type="password" class="form-control" id="password-confirm" name="password_confirm" placeholder="Ingrese Confirmación Contraseña">
             <br/>
           </div>
 

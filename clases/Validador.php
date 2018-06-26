@@ -1,6 +1,7 @@
 <?php
+require_once "clases/JsonDb.php";
 
-  class Validaciones{
+  class Validador{
 
 
 //validar si hubo errores

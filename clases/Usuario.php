@@ -4,14 +4,16 @@
 
     private $nombre;
     private $apellido;
-    private $usuario;
+    private $email;
+    private $username;
     private $password;
     private $avatar;
 
-    public function __construct($usuario, $password, $nombre = null, $apellido = null, $avatar = null){
+    public function __construct($email, $username, $password, $nombre = null, $apellido = null, $avatar = null){
 
-      $this->usuario = $usuario;
-      $this->password = $password;
+      $this->email = $email;
+      $this->username = $username;
+      $this->password = password_hash($password, PASSWORD_BCRYPT);
       $this->nombre = $nombre;
       $this->apellido = $apellido;
       $this->avatar = $avatar;
@@ -28,8 +30,12 @@
       $this->apellido = $apellido;
     }
 
-    public function setUsuario($usuario){
-      $this->usuario = $usuario;
+    public function setEmail($email){
+      $this->email = $email;
+    }
+
+    public function setUsername($username){
+      $this->username = $username;
     }
 
     public function setAvatar($avatar){
@@ -43,19 +49,23 @@
     }
 
     public function getApellido(){
-
+      return $this->apellido;
     }
 
-    public function getUsuario(){
+    public function getEmail(){
+      return $this->email;
+    }
 
+    public function getUsername(){
+      return $this->username;
     }
 
     public function getPassword(){
-
+      return $this->password;
     }
 
     public function getAvatar(){
-
+      return $this->avatar;
     }
   }
  ?>

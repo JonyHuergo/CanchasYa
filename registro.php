@@ -1,13 +1,11 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
  session_start();
  if(isset($_SESSION["registrado"])){
    header("Location: paginaPrincipal.html");
  }
 
+require_once "clases/FormularioRegistro.php";
 require_once "clases/Validador.php";
 require_once "clases/JsonDb.php";
 require_once "clases/SQLdb.php";
@@ -24,46 +22,17 @@ if($SQL){
   Db::inicializar($dns,$db_user,$db_pass);
   $SQLdb = new SQLdb($dns,$db_user,$db_pass);
 } else {
- $user = JsonDb::usuarioNuevo();
+  $user = JsonDb::usuarioNuevo();
 }
 
- $errores = [
-   "username" => [],
-   "email" => [],
-   "password" => []
-];
+$errores = [];
 
 // Validar si se completo o no el formulario
 if ($_POST) {
-  if(isset($_POST["nombre"])){
-    $user["nombre"] = $_POST["nombre"];
-  }
-  if(isset($_POST["apellido"])){
-    $user["apellido"] = $_POST["apellido"];
-  }
-  $erroresEnNombreDeUsuario = Validador::validarNombreDeUsuario($_POST["username"]);
-  if (empty($erroresEnNombreDeUsuario)) {
-    $user["username"] = $_POST["username"];
-  } else {
-    $errores["username"] = $erroresEnNombreDeUsuario;
-  }
-  //Validar password
-  $erroresEnPassword = Validador::validarPassword($_POST["password"], $_POST["password_confirm"]);
-  if (empty($erroresEnPassword)) {
-    $user["password"] = $_POST["password"];
-  } else {
-    $errores["password"] = $erroresEnPassword;
-  }
-  //Validar  email
-  $erroresEnMail = Validador::validarEmail($_POST["email"], $_POST["email_confirm"]);
-  if (empty($erroresEnMail)) {
-    $user["email"] = $_POST["email"];
-  } else {
-    $errores["email"] = $erroresEnMail;
-  }
-  if (isset($_FILES["avatar"]) && Validador::validarAvatar($_FILES["avatar"])) {
-    $user["avatar_url"] = $_FILES["avatar"];
-  }
+
+  $errores=FormularioRegistro::validar($_POST,$_FILES);
+
+
   if (! Validador::huboErrores($errores)) {
 
     if(!$SQL){
@@ -76,7 +45,7 @@ if ($_POST) {
 
     } else {
 
-      $usuario = new Usuario($user["email"],$user["username"],$user["password"],$user["nombre"],$user["apellido"],$user["avatar_url"]);
+      $usuario = new Usuario($_POST["email"],$_POST["username"],$_POST["password"],$_POST["nombre"],$_POST["apellido"],$_POST["avatar_url"]);
 
       $nombre = $usuario->getNombre();
       $apellido = $usuario->getApellido();

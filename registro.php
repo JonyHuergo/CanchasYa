@@ -23,6 +23,8 @@ $SQL = true;
 if($SQL){
   Db::inicializar($dns,$db_user,$db_pass);
   $SQLdb = new SQLdb($dns,$db_user,$db_pass);
+} else {
+ $user = JsonDb::usuarioNuevo();
 }
 
  $errores = [
@@ -30,10 +32,6 @@ if($SQL){
    "email" => [],
    "password" => []
 ];
-
-if(!$SQL){
-  $user = JsonDb::usuarioNuevo();
-}
 
 // Validar si se completo o no el formulario
 if ($_POST) {

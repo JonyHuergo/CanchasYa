@@ -8,7 +8,7 @@ error_reporting(E_ALL);
    header("Location: paginaPrincipal.html");
  }
 
-require_once "clases/validador.php";
+require_once "clases/Validador.php";
 require_once "clases/JsonDb.php";
 require_once "clases/SQLdb.php";
 require_once "clases/Db.php";

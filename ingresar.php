@@ -1,8 +1,10 @@
 <?php
+
     session_start();
     if(isset($_SESSION["registrado"])){
-    header("Location: paginaPrincipal.html");
+    header("Location: paginaPrincipal.php");
     }
+    require_once "clases/FormularioIngresar.php";
     require_once "clases/JsonDb.php";
     require_once "clases/SQLdb.php";
     require_once "clases/Db.php";
@@ -14,39 +16,12 @@
     //Booleano para definir si se utiliza SQL o JSON para guardar los datos
     $SQL = true;
 
-    $errores = [
-      "usuario" => "",
-      "password" => ""
-    ];
-    if ($_POST) {
-      if (!$_POST["usuario"]){
-        $errores["usuario"] = "El usuario debe ser completado";
-      }
-      if (!$_POST["contraseña"]){
-        $errores ["password"] = "La contraseña debe ser completada";
-      }
-      if ($_POST["usuario"] && $_POST["contraseña"]){
-        if($SQL){
-          $SQLdb = new SQLdb($dns, $db_user, $db_pass);
-          $usuario = $SQLdb->buscarUsuario($_POST["usuario"]);
-        } else{
-          $usuario = JsonDb::buscarUsuario($_POST["usuario"]);
-        }
+    $errores = [];
 
-       if ($usuario) {
-        $passwordValidado = password_verify($_POST["contraseña"], $usuario["password"]);
-        if ($passwordValidado) {
-          $_SESSION["registrado"]=true;
-          $_SESSION["usuario"]=$_POST["usuario"];
-          header("Location: bienvenido.php");
-          die();
-        } else {
-          $errores ["password"] = "Contraseña incorrecta";
-        }
-      } else {
-        $errores ["usuario"] = "El usuario introducido no está registrado";
-      }
-    }
+    if ($_POST) {
+
+    $errores = FormularioIngresar::validar($_POST,$SQL,$dns, $db_user, $db_pass);
+
     if(isset($_POST["recordarme"])){
         setcookie("usuario", $_POST["usuario"], time()+3600*24*7);
         setcookie("password", $_POST["contraseña"], time()+3600*24*7);
@@ -79,7 +54,7 @@
               <nav class="sticky-top">
                   <div>
                     <ul class="menu text-center">
-                      <li><a href="paginaPrincipal.html">Principal</a></li><li><a href="preguntas.html">Preguntas </a></li><li><a href="registro.php">Registrarse</a></li><li class="active"><a href="ingresar.php">Ingresar</a></li>
+                      <li><a href="paginaPrincipal.php">Principal</a></li><li><a href="preguntas.html">Preguntas </a></li><li><a href="registro.php">Registrarse</a></li><li class="active"><a href="ingresar.php">Ingresar</a></li>
                     </ul>
                 </div>
               </nav>

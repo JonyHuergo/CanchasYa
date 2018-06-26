@@ -2,7 +2,7 @@
 
  session_start();
  if(isset($_SESSION["registrado"])){
-   header("Location: paginaPrincipal.html");
+   header("Location: paginaPrincipal.php");
  }
 
 require_once "clases/FormularioRegistro.php";
@@ -38,7 +38,7 @@ if ($_POST) {
     if(!$SQL){
 
       if (JsonDb::crearUsuario($user)) {
-        header("Location: paginaPrincipal.html");
+        header("Location: paginaPrincipal.php");
       } else {
         exit("Ha ocurrido un error inesperado");
       }
@@ -100,7 +100,7 @@ if ($_POST) {
 
   <nav class="sticky-top">
     <ul class="menu text-center">
-      <li><a href="paginaPrincipal.html">Principal</a></li><li><a href="preguntas.html">Preguntas</a></li><li class="active"><a href="registro.php">Registrarse</a></li><li><a href="ingresar.php">Ingresar</a></li>
+      <li><a href="paginaPrincipal.php">Principal</a></li><li><a href="preguntas.html">Preguntas</a></li><li class="active"><a href="registro.php">Registrarse</a></li><li><a href="ingresar.php">Ingresar</a></li>
     </ul>
   </nav>
 

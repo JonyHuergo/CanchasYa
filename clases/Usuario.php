@@ -9,14 +9,19 @@
     private $password;
     private $avatar;
 
-    public function __construct($email, $username, $password, $nombre = null, $apellido = null, $avatar = null){
+    public function __construct($email, $username, $password, $nombre = null, $apellido = null, $avatar = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"){
 
       $this->email = $email;
       $this->username = $username;
       $this->password = password_hash($password, PASSWORD_BCRYPT);
       $this->nombre = $nombre;
       $this->apellido = $apellido;
-      $this->avatar = $avatar;
+      if(is_null($avatar)){
+        $this->avatar = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+      } else{
+        $this->avatar = $avatar;
+      }
+
 
     }
 

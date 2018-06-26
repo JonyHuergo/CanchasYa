@@ -1,0 +1,164 @@
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: #E19605;
+}
+
+.container{
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+main {
+  margin: 0 auto;
+  background-color: #ffffff;
+}
+
+.logo img{
+  width: 240px;
+  margin-top: 40px;
+}
+
+nav{
+  background-color: #e8e8e8;
+  margin-top: 30px;
+  width: 100%;
+  display: block;
+  height: 56px;
+  overflow:hidden;
+}
+
+nav .menu{
+  float: right;
+  font-family: 'ABeeZee', sans-serif;
+}
+
+nav .menu li{
+  display: inline-block;
+}
+
+nav .menu li.active a{
+  background: #4b9c35;
+  color:white;
+}
+
+nav .menu li a{
+  text-decoration: none;
+  padding: 20px;
+  display: block;
+  color: black;
+}
+
+nav .menu li a:hover{
+  background: #6c4799;
+  color: white;
+}
+
+main{
+  width: 100%;
+  height: 100%;
+  background-image: url(../imagenes/fondo.png);
+  padding: 30px;
+  }
+
+main h1{
+  font-family: 'Righteous', cursive, sans-serif;
+  text-align: center;
+}
+
+main span{
+  text-align: center;
+  margin: 30px auto;
+}
+
+.footer-general {
+  background-color:black;
+  width: 100%;
+  height: 100px;
+  margin: 0 auto;
+  margin-bottom: 25px;
+  margin-top: -17px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  overflow: hidden;
+}
+
+.footer-general li{
+  display: inline-block;
+}
+
+.footer-general ul{
+  text-align: center;
+}
+
+.fa{
+  display: inline-block;
+  color:white;
+  margin: 8px auto;
+}
+
+.fa:hover{
+  color: black;
+  font-size: 3em;
+}
+
+.footer-icons{
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.footer-icons:hover{
+  background-color: white;
+}
+
+@media (max-width: 768px){
+
+  .container{
+    padding: 0;
+  }
+
+  nav .menu{
+      float:none;
+      width: 100%;
+      padding: 0;
+      margin: 0;
+  }
+
+  nav li{
+      display: inline-block;
+      width: 25%;
+      height: auto;
+  }
+
+}
+
+@media (max-width: 480px){
+
+  .logo{
+    margin: 10px auto;
+  }
+
+  .logo img{
+    display: block;
+    margin: 0 auto;
+  }
+
+  .sticky-top{
+    position: static;
+  }
+
+  nav{
+    height: auto;
+  }
+
+  nav ul li{
+    width: 100%;
+    border-bottom: 5px solid #6c4799;
+  }
+
+  nav ul li:first-child{
+    border-top: 5px solid #6c4799;
+  }
+
+}

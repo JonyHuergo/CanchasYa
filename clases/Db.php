@@ -60,6 +60,20 @@ require_once "clases/SQLdb.php";
     }
 
     public static function inicializar($dns, $user, $password){
+      $SQLdb = new SQLdb("mysql:host=127.0.0.1", $user, $password);
+
+      $SQLdb->PDO->beginTransaction();
+
+      try {
+       $SQLdb->PDO->exec("CREATE SCHEMA IF NOT EXISTS e-commerce;");
+       $SQLdb->PDO->commit();
+      }
+      catch(PDOException $Exception) {
+
+       $SQLdb->PDO->rollBack();
+       echo $Exception->getMessage();
+      }
+
       $SQLdb = new SQLdb($dns, $user, $password);
 
       $SQLdb->PDO->beginTransaction();

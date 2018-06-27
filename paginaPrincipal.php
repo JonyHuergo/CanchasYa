@@ -25,7 +25,7 @@
         <nav class="sticky-top">
           <div>
               <ul class="menu text-center">
-                <li class="active"><a href="paginaPrincipal.php">Principal</a></li><li><a href="preguntas.html">Preguntas</a></li><li><a href="registro.php">Registrarse</a></li><li><a href="ingresar.php">Ingresar</a></li>
+                <li class="active"><a href="paginaPrincipal.php">Principal</a></li><li><a href="preguntas.php">Preguntas</a></li><li><a href="registro.php">Registrarse</a></li><li><a href="ingresar.php">Ingresar</a></li>
               </ul>
           </div>
         </nav>

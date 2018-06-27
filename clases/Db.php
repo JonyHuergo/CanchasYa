@@ -65,7 +65,7 @@ require_once "clases/SQLdb.php";
       $SQLdb->PDO->beginTransaction();
 
       try {
-       $SQLdb->PDO->exec("CREATE SCHEMA IF NOT EXISTS e-commerce;");
+       $SQLdb->PDO->exec("CREATE SCHEMA IF NOT EXISTS ecommerce;");
        $SQLdb->PDO->commit();
       }
       catch(PDOException $Exception) {

@@ -9,7 +9,7 @@
     require_once "clases/SQLdb.php";
     require_once "clases/Db.php";
 
-    $dns ='mysql:host=127.0.0.1;dbname=e-commerce;port=3306';
+    $dns ='mysql:host=127.0.0.1;dbname=ecommerce;port=3306';
     $db_user = 'root';
     $db_pass = 'root';
 

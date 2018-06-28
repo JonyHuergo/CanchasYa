@@ -18,9 +18,16 @@ $db_pass = 'root';
 //Booleano para definir si se utiliza SQL o JSON para guardar los datos
 $SQL = true;
 
+//Booleano para definir si se quiere migrar la base de datos JSON a SQL
+$migrarJSON=false;
+
 if($SQL){
   Db::inicializar($dns,$db_user,$db_pass);
   $SQLdb = new SQLdb($dns,$db_user,$db_pass);
+  
+  if($migrarJSON){
+   migrar($dns,$db_user,$db_pass);
+  }
 } else {
   $user = JsonDb::usuarioNuevo();
 }
